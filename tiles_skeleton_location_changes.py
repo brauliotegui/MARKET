@@ -85,17 +85,17 @@ class Customer:
 
          self.current_location = new_location
          if self.current_location == 'spices':
-             newx = TILE_SIZE * np.random.randint(10,11)
-             newy = TILE_SIZE * np.random.randint(1,7)
+             newx = OFS + TILE_SIZE * np.random.randint(11,12)
+             newy = OFS + TILE_SIZE * np.random.randint(1,10)
          elif self.current_location == 'fruits':
-             newx = TILE_SIZE * np.random.randint(14,15)
-             newy = TILE_SIZE * np.random.randint(1,7)
+             newx = OFS + TILE_SIZE * np.random.randint(14,15)
+             newy = OFS + TILE_SIZE * np.random.randint(1,10)
          elif self.current_location == 'drinks':
-             newx = TILE_SIZE * np.random.randint(2,3)
-             newy = TILE_SIZE * np.random.randint(1,7)
+             newx = OFS + TILE_SIZE * np.random.randint(3,4)
+             newy = OFS + TILE_SIZE * np.random.randint(1,10)
          elif self.current_location == 'dairy':
-             newx = TILE_SIZE * np.random.randint(6,7)
-             newy = TILE_SIZE * np.random.randint(1,7)
+             newx = OFS + TILE_SIZE * np.random.randint(6,7)
+             newy = OFS + TILE_SIZE * np.random.randint(1,10)
          frame[newy:newy+TILE_SIZE, newx:newx+TILE_SIZE] = self.image
 
          # if self.tmap.contents[newy][newx] != '#':
