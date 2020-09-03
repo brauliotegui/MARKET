@@ -2,6 +2,7 @@
 import numpy as np
 import cv2
 import random
+import time
 
 TILE_SIZE = 32              # basically defines size of each tile and to how many pixels it correspond (that is 32*32 pixels = 1 tile)
 OFS = 50                    # the black area around the supermarket picture (OFFSET)
@@ -85,20 +86,33 @@ class Customer:             # our shopping ghost
     def __repr__(self):                     # returns where the customer is drwan, if no errors occur
         return f"customer at {self.x}/{self.y}"
 
+class Ghost(Customer):
+
+    def move(self, direction):
+        newx = self.x
+        newy = self.y
+        newy += random.randint(-1, 1)
+        newx += random.randint(-1, 1)
+
+        if self.tmap.contents[newy][newx] != '#':    #if statement allows customers to move only on dots, not on # in the MARKET
+            self.x = newx                             # changed inorder not to be able to moveon #, but yet onto groceries
+            self.y = newy
+
+
 background = np.zeros((700, 1000, 3), np.uint8)  # not sure what this does
 tiles = cv2.imread('tiles.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
 
 # takes the position and thereby one of the different images from  the tiles.png
 customer_image = tiles[-2*TILE_SIZE:-1*TILE_SIZE,:1*TILE_SIZE]  # this one gives a ghost
-customer_image2 = tiles[-3*TILE_SIZE:-2*TILE_SIZE,:1*TILE_SIZE] # this one gives a pacman
+customer_image2 = tiles[3*TILE_SIZE:4*TILE_SIZE,1*TILE_SIZE:2*TILE_SIZE] # this one gives a pacman
 
 tmap = TiledMap(MARKET, tiles)
 
-c = Customer(tmap,customer_image, 15,10)
-c2 = Customer(tmap,customer_image2, 13,10)
+c = Customer(tmap,customer_image2, 15,10)
+g = Ghost(tmap,customer_image, 12,9)
 
  # a simple way of increasing the number of (identical looking) customers, to include only one, the shorter version of bunch is used
-bunch = [Customer(tmap, customer_image, 15, 10)]
+bunch = [Customer(tmap, customer_image2, 15, 10)]
 #bunch = [Customer(tmap, customer_image, 15-np.random.randint(3), 10np.random.randint(3)) for c in range(10)]
 
 # infinite loop to refresh the frame with supermarket and customers on
@@ -107,7 +121,8 @@ while True:
     tmap.draw(frame)
     for c in bunch:
         c.draw(frame)
-    c2.draw(frame)
+    g.move(frame)
+    g.draw(frame)
 
 
     cv2.imshow('frame', frame)
@@ -124,6 +139,7 @@ while True:
 
     if key == 'q':
         break
+
 
 cv2.destroyAllWindows()
 
