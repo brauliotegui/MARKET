@@ -57,64 +57,53 @@ class Customer:
     Customer class that models the customer behavior in a supermarket.
     '''
 
-    # If we say every customer has the same possible locations we could
-    # define the possible locations outside of the __init__ method
-    possible_locations = ['Entrance','dairy', 'drinks', 'fruits', 'spices']
-    # This is creating a class-attribute
-    transition_probabilities = {'Entrance': [0.0, 0.21572721, 0.29645094, 0.36464857, 0.12317328],
-               'dairy': [0.11788269, 0.74391989, 0.00658083, 0.06437768, 0.06723891],
-               'drinks': [0.11333659, 0.10649731, 0.61064973, 0.06350757, 0.10600879],
-               'fruits': [0.20328382, 0.07036747, 0.07271306, 0.60711493, 0.04652072],
-               'spices': [0.23045603, 0.1490228 , 0.13192182, 0.09934853, 0.38925081]}
 
-
-    # At    tributes are defined in the constructor of the class
-    def __init__(self,  tmap, image, current_location):
+    def __init__(self,  tmap, image, x, y, current_location):
         self.tmap = tmap
         self.image = image
+        self.x = x
+        self.y = y
         self.current_location = current_location
-        #self.transition_probabilities = transition_probabilities
+        self.possible_locations = ['dairy', 'drinks', 'fruits', 'spices']
+        self.transition_probabilities = {
+               'dairy': [0.74391989, 0.00658083, 0.06437768, 0.06723891],
+               'drinks': [0.10649731, 0.61064973, 0.06350757, 0.10600879],
+               'fruits': [0.07036747, 0.07271306, 0.60711493, 0.04652072],
+               'spices': [0.1490228 , 0.13192182, 0.09934853, 0.38925081]}
 
+    def change_location(self):
+         '''
+         Choses a new location among the provided locations.
 
-    def change_location(self, frame):
-        '''
-        Choses a new location among the provided locations.
+         Parameters
+         ----------
+         locations : The locations the customer might transition to.
+         '''
+         newx = self.x
+         newy = self.y
+         new_location = random.choices(self.possible_locations, self.transition_probabilities[self.current_location])[0]
 
-        Parameters
-        ----------
-        locations : The locations the customer might transition to.
-        '''
-        new_location = random.choice(self.possible_locations, p=self.transition_probabilities)
-        self.current_location = new_location
+         self.current_location = new_location
+         if self.current_location == 'spices':
+             newx = TILE_SIZE * np.random.randint(10,11)
+             newy = TILE_SIZE * np.random.randint(1,7)
+         elif self.current_location == 'fruits':
+             newx = TILE_SIZE * np.random.randint(14,15)
+             newy = TILE_SIZE * np.random.randint(1,7)
+         elif self.current_location == 'drinks':
+             newx = TILE_SIZE * np.random.randint(2,3)
+             newy = TILE_SIZE * np.random.randint(1,7)
+         elif self.current_location == 'dairy':
+             newx = TILE_SIZE * np.random.randint(6,7)
+             newy = TILE_SIZE * np.random.randint(1,7)
+         frame[newy:newy+TILE_SIZE, newx:newx+TILE_SIZE] = self.image
 
-        if self.new_location == 'spices':
-            newx = self.spices[np.random.randint(10,11)]
-            newy = self.spices[np.random.randint(1,7)]
-        elif self.new_location == 'fruits':
-            newx = self.fruits[np.random.randint(14,15)]
-            newy = self.fruits[np.random.randint(1,7)]
-        elif self.new_location == 'drinks':
-            newx = self.drinks[np.random.randint(2,3)]
-            newy = self.drinks[np.random.randint(1,7)]
-        elif self.new_location == 'dairy':
-            newx = self.dairy[np.random.randint(6,7)]
-            newy = self.dairy[np.random.randint(1,7)]
-
-        frame[newy:newy+TILE_SIZE, newx:newx+TILE_SIZE] = self.image
-
-    # def draw(self, frame):              # puts the customer-object onto the map
-    #     newx = OFS + self.x * TILE_SIZE
-    #     newy = OFS + self.y * TILE_SIZE
-    #     frame[newy:newy+TILE_SIZE, newx:newx+TILE_SIZE] = self.image
-
-        if self.tmap.contents[newy][newx] != '#':    #if statement allows customers to move only on dots, not on # in the MARKET
-            self.x = newx                             # changed inorder not to be able to moveon #, but yet onto groceries
-            self.y = newy
-
+         # if self.tmap.contents[newy][newx] != '#':
+         #     self.x = newx
+         #     self.y = newy
 
     def __repr__(self):                     # returns where the customer is drwan, if no errors occur
-        return f'''is in location {self.current_location}
-        and has {self.budget} € to spend'''
+        return f'''is in location {self.current_location}'''
 
 
 background = np.zeros((700, 1000, 3), np.uint8)  # not sure what this does
@@ -124,16 +113,12 @@ tiles = cv2.imread('tiles.png')                 # calls the empty supermarket im
 
 
 customer_image = tiles[-2*TILE_SIZE:-1*TILE_SIZE,:1*TILE_SIZE]  # this one gives a ghost
-transition_probabilities = {'Entrance': [0.0, 0.21572721, 0.29645094, 0.36464857, 0.12317328],
-           'dairy': [0.11788269, 0.74391989, 0.00658083, 0.06437768, 0.06723891],
-           'drinks': [0.11333659, 0.10649731, 0.61064973, 0.06350757, 0.10600879],
-           'fruits': [0.20328382, 0.07036747, 0.07271306, 0.60711493, 0.04652072],
-           'spices': [0.23045603, 0.1490228 , 0.13192182, 0.09934853, 0.38925081]}
 
+possible_locations = ['dairy', 'drinks', 'fruits', 'spices']
 
 tmap = TiledMap(MARKET, tiles)
 
-c = Customer(tmap,customer_image, 'Entrance')
+c = Customer(tmap,customer_image, 15,10,'spices')
 
  # a simple way of increasing the number of (identical looking) customers, to include only one, the shorter version of bunch is used
 #bunch = [Customer(tmap, customer_image, 15, 10)]
@@ -144,18 +129,28 @@ while True:
     frame = background.copy()
     tmap.draw(frame)
 
-    #c.move(frame)
-    c.change_location(frame)
+    #c.draw(frame)
+    c.change_location()
     # for c in bunch:
     #    c.draw(frame)
 
     cv2.imshow('frame', frame)
 
     key = chr(cv2.waitKey(1) & 0xFF) # key-settings allow to interact with the frame, exert movement based on the 'PC-gaming keys: wasd', use 'q' in the frame to exit
-
+    time.sleep(1)
     if key == 'q':
         break
-    time.sleep(5)
+
+    # possible_locations = ['Entrance','dairy', 'drinks', 'fruits', 'spices']
+    # transition_probabilities = {'Entrance': [0.0, 0.21572721, 0.29645094, 0.36464857, 0.12317328],
+    #        'dairy': [0.11788269, 0.74391989, 0.00658083, 0.06437768, 0.06723891],
+    #        'drinks': [0.11333659, 0.10649731, 0.61064973, 0.06350757, 0.10600879],
+    #        'fruits': [0.20328382, 0.07036747, 0.07271306, 0.60711493, 0.04652072],
+    #        'spices': [0.23045603, 0.1490228 , 0.13192182, 0.09934853, 0.38925081]}
+    # # print(possible_locations)
+    # # print(transition_probabilities)
+    # new_location = random.choices(possible_locations, transition_probabilities['spices'])[0]
+    # print(new_location)
 
 cv2.destroyAllWindows()
 
