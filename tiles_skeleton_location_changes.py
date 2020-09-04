@@ -149,13 +149,13 @@ class Ghost:
             self.y = newy
 
 background = np.zeros((700, 1000, 3), np.uint8)  # not sure what this does
-tiles = cv2.imread('better_tiles.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
+tiles = cv2.imread('tiles2.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
 
 # takes the position and thereby one of the different images from  the tiles.png
 
 
-customer_image = tiles[-2*TILE_SIZE:-1*TILE_SIZE,:1*TILE_SIZE]  # this one gives a ghost
-customer_image2 = tiles[3*TILE_SIZE:4*TILE_SIZE,1*TILE_SIZE:2*TILE_SIZE]
+customer_image = tiles[2*TILE_SIZE:3*TILE_SIZE, -3*TILE_SIZE:-2*TILE_SIZE, :]  # this one gives a ghost
+customer_image2 = tiles[1*TILE_SIZE:2*TILE_SIZE, -2*TILE_SIZE:-1*TILE_SIZE, :]
 
 possible_locations = ['dairy', 'drinks', 'fruits', 'spices']
 
