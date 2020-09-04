@@ -11,15 +11,15 @@ OFS = 50                    # the black area around the supermarket picture (OFF
 MARKET = """
 ##################
 ##..............##
-##..##..##..##..b#
-##..##..##..##..b#
-##..##..##..##..##
-##..##..##..##..##
-##..##..##..##..##
+##..pq..aw..db..##
+##..pq..aw..db..##
+##..pq..aw..db..##
+##..pq..aw..db..##
+##..pq..aw..db..##
 ##...............#
-##..##..##..##...#
-##..##..##..##...#
-##...............#
+##..xy..zx..xm...#
+##..yx..xz..mx...#
+##............s.s#
 ##################
 """.strip()
 
@@ -149,7 +149,7 @@ class Ghost:
             self.y = newy
 
 background = np.zeros((700, 1000, 3), np.uint8)  # not sure what this does
-tiles = cv2.imread('tiles2.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
+tiles = cv2.imread('better_tiles.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
 
 # takes the position and thereby one of the different images from  the tiles.png
 
