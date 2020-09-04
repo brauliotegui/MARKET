@@ -143,26 +143,25 @@ class Ghost:
         newy = self.y
         newy += random.randint(-1, 1)
         newx += random.randint(-1, 1)
-
-        if self.tmap.contents[newy][newx] != '#':    #if statement allows customers to move only on dots, not on # in the MARKET
-            self.x = newx                             # changed inorder not to be able to moveon #, but yet onto groceries
+        if self.tmap.contents[newy][newx] != '#':
+            self.x = newx
             self.y = newy
 
 background = np.zeros((700, 1000, 3), np.uint8)  # not sure what this does
-tiles = cv2.imread('better_tiles.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
+tiles = cv2.imread('tiles2.png')                 # calls the empty supermarket image (which has to be in the same folder as the script)
 
 # takes the position and thereby one of the different images from  the tiles.png
 
 
-customer_image = tiles[-2*TILE_SIZE:-1*TILE_SIZE,:1*TILE_SIZE]  # this one gives a ghost
-customer_image2 = tiles[3*TILE_SIZE:4*TILE_SIZE,1*TILE_SIZE:2*TILE_SIZE]
+customer_image = tiles[1*TILE_SIZE:2*TILE_SIZE, -2*TILE_SIZE:-1*TILE_SIZE, :]  # this one gives a ghost
+ghost_trump = tiles[2*TILE_SIZE:3*TILE_SIZE, -3*TILE_SIZE:-2*TILE_SIZE, :]
 
 possible_locations = ['dairy', 'drinks', 'fruits', 'spices']
 
 tmap = TiledMap(MARKET, tiles)
 
-c = Customer(tmap,customer_image2, 15,10,'spices')
-g = Ghost(tmap,customer_image, 12,9)
+c = Customer(tmap,customer_image, 15,10,'spices')
+g = Ghost(tmap,ghost_trump, 12,9)
 
 
 # infinite loop to refresh the frame with supermarket and customers on
