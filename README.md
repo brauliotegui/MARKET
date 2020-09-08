@@ -1,5 +1,5 @@
 # Supermarket Simulation
-This python program applyies the Markov Chain and Monte-Carlo modeling to simulates and visualizes customer behavior such as the transition probability: which aisles will the customer choose to shop? Or pehaps, even calculatin the the amount of time and money they spend at each aisle . The simulation can be based on any day of the week or on the whole weekdays with a given number of customers. 
+This python program applyies the Markov Chain modeling and Monte-Carlo simulation to simulates and visualizes customer behavior such as the transition probability: which aisles will the customer choose to shop? Or pehaps, even calculatin the the amount of time and money they spend at each aisle . The simulation can be based on any day of the week or on the whole weekdays with a given number of customers. 
 
 The project roughly consists of four stages:
 
@@ -10,3 +10,4 @@ The project roughly consists of four stages:
 
 A sample of the visualization can be seen here (with adapted shopping items and customer icons for fun purposes):
 
+  <img src="https://github.com/brauliotegui/MARKET/blob/master/marketanimation.gif" width="75%" height="75%">
