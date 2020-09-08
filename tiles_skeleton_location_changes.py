@@ -178,7 +178,7 @@ while True:
     cv2.imshow('frame', frame)
 
     key = chr(cv2.waitKey(1) & 0xFF) # key-settings allow to interact with the frame, exert movement based on the 'PC-gaming keys: wasd', use 'q' in the frame to exit
-    time.sleep(1)
+    time.sleep(0.5)
     if key == 'q':
         break
 
